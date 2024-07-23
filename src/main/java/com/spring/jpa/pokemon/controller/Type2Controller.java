@@ -39,11 +39,6 @@ public class Type2Controller {
 
     }
 
-    @PutMapping("/updateType2")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void updateMultiplePokemon(@RequestBody List<Type2> type2List){
-        type2Service.updateType2(type2List);
-    }
 
 
 
