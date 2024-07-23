@@ -1,9 +1,6 @@
 package com.spring.jpa.pokemon.service;
 
-import com.spring.jpa.pokemon.model.Pokemon;
-import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
-import com.spring.jpa.pokemon.repository.Type1Repository;
 import com.spring.jpa.pokemon.repository.Type2Repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +26,6 @@ public class Type2Service {
     public Type2 findOneType(int id){
         Optional<Type2> optionalType2 =type2Repository.findById(id);
         return optionalType2.orElse(null);
-
-    }
-
-    public void updateType2(List<Type2> type2List){
-        type2Repository.saveAll(type2List);
 
     }
 

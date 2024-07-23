@@ -2,6 +2,8 @@ package com.spring.jpa.pokemon.controller;
 
 
 import com.spring.jpa.pokemon.model.Type1;
+import com.spring.jpa.pokemon.repository.PokemonRepository;
+import com.spring.jpa.pokemon.repository.Type1Repository;
 import com.spring.jpa.pokemon.service.Type1Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,13 @@ public class Type1Controller {
 
 @Autowired
 private final Type1Service type1Service;
+
+@Autowired
+private final Type1Repository type1Repository;
+
+@Autowired
+private final PokemonRepository pokemonRepository;
+
 
     @PostMapping("/addMultipleTypes")
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,5 +48,7 @@ private final Type1Service type1Service;
         return optionalType1.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
+
+
 
 }
