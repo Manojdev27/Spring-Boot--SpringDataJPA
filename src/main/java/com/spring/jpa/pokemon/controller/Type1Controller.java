@@ -1,10 +1,11 @@
 package com.spring.jpa.pokemon.controller;
 
 
+import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type1Repository;
-import com.spring.jpa.pokemon.service.Type1Service;
+import com.spring.jpa.pokemon.service.Type1ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class Type1Controller {
 
 @Autowired
-private final Type1Service type1Service;
+private final Type1ServiceImpl type1Service;
 
 @Autowired
 private final Type1Repository type1Repository;
@@ -49,6 +50,22 @@ private final PokemonRepository pokemonRepository;
 
     }
 
+    @PutMapping("/updateType/{pokemonId}/{type1Id}")
+    public ResponseEntity<Type1> updateType1Pokemon(@PathVariable List<Integer> pokemonId, @PathVariable int type1Id, @RequestBody Type1 type1){
+        type1.setTypeId(type1Id);
+        return new ResponseEntity<Type1>(type1Service.updateType(pokemonId,type1Id,type1),HttpStatus.OK);
+    }
 
+//    @PutMapping("/updateType/{pokemonId}/{type1Id}")
+//    public ResponseEntity<Type1> updateType1PokemonBulk(@PathVariable List<Integer> pokemonId, @PathVariable List<Integer> type1Id, @RequestBody List<Type1> type1){
+//        return new ResponseEntity<Type1>(type1Service.updateType(pokemonId,type1Id,type1),HttpStatus.OK);
+//    }
+
+
+    @DeleteMapping("/deleteType/{type1Id}")
+    public String deleteTypeById(@PathVariable int type1Id){
+        type1Service.delete(type1Id);
+        return type1Id + " is Deleted";
+    }
 
 }
