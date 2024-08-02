@@ -2,9 +2,13 @@ package com.spring.jpa.pokemon.service;
 
 import com.spring.jpa.pokemon.dto.PokemonResponse;
 import com.spring.jpa.pokemon.exception.NoPokemonExistsException;
+import com.spring.jpa.pokemon.exception.NoTypeExistsException;
 import com.spring.jpa.pokemon.model.Pokemon;
+import com.spring.jpa.pokemon.model.Type1;
+import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type1Repository;
+import com.spring.jpa.pokemon.repository.Type2Repository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,9 @@ public class PokemonServiceImpl implements PokemonServices{
 
     @Autowired
     private final Type1Repository type1Repository;
+
+    @Autowired
+    private final Type2Repository type2Repository;
 
     @Override
     @Transactional
@@ -59,27 +66,50 @@ return pokemonRepository.findAll();
 
     @Override
     @Transactional
-    public Pokemon updatePokemon(@NotNull @Valid final Pokemon pokemon){
-        logger.debug("Updating {}", pokemon);
-        Optional<Pokemon> existingPokemon = pokemonRepository.findById(pokemon.getPokemonId());
-        if (existingPokemon.isEmpty()){
-            throw new NoPokemonExistsException(
-                    String.format("No user exist with id=%s",pokemon.getPokemonId()));
+    public List<Pokemon> findAllPokemonById(List<Integer> id) {
+        return pokemonRepository.findAllById(id);
+    }
+
+
+    @Override
+    @Transactional
+    public Pokemon updatePokemon(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id,@NotNull @Valid final int type2Id, @NotNull @Valid final Pokemon pokemon){
+        logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
+        Type1 type1 = type1Repository.findById(type1Id)
+                .orElseThrow(() -> new NoTypeExistsException(String.format("No Type exists with id=%d",type1Id)));
+
+        Type2 type2 = type2Repository.findById(type2Id)
+                .orElseThrow(() -> new NoTypeExistsException(String.format("No Type exists with id=%d",type2Id)));
+
+        if (!pokemonRepository.existsById(pokemonId)){
+            throw new NoPokemonExistsException(String.format("No Pokemon exists with id=%d",pokemonId));
         }
+
+        pokemon.setPokemonId(pokemonId);
+        pokemon.setType1(type1);
+        pokemon.setType2(type2);
         return pokemonRepository.save(pokemon);
    }
 
     @Override
     @Transactional
-    public void deletePokemon(@NotNull @Valid final int pokemonId) {
-       logger.debug("Deleting {}",pokemonId);
-       Optional<Pokemon> pokemonExisting = pokemonRepository.findById(pokemonId);
-        if (pokemonExisting.isEmpty()){
-            throw new NoPokemonExistsException(
-                    String.format("No user exist with id=%s",pokemonId));
+    public void deletePokemon(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id) {
+        logger.info("Deleting {} on PokemonId={}",type1Id,pokemonId);
+        if(!type1Repository.existsById(type1Id)){
+            throw new NoTypeExistsException(String.format("No type exists with id=%d",type1Id));
         }
-        pokemonRepository.deleteById(pokemonId);
+        Optional<Pokemon> pokemon = pokemonRepository.findById(pokemonId);
+        if(pokemon.isEmpty()){
+            throw new NoPokemonExistsException(String.format("No Pokemon exists with id=%d",pokemonId));
+        }
+pokemonRepository.deleteById(pokemonId);
     }
+
+    @Override
+    public void deleteAllPokemon() {
+        pokemonRepository.deleteAll();
+    }
+
 
     public PokemonResponse pokemonResponse(Pokemon pokemon){
 return PokemonResponse.builder()
@@ -90,7 +120,6 @@ return PokemonResponse.builder()
         .type2(pokemon.getType2())
         .build();
 }
-
 
 
 }

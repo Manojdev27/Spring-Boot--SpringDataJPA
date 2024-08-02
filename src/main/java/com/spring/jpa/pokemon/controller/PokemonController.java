@@ -32,7 +32,7 @@ public class PokemonController {
     @PostMapping("/addMultiplePokemon")
     @ResponseStatus(HttpStatus.CREATED)
     public List<Pokemon> saveMultiplePokemon(@RequestBody List<Pokemon> pokemon){
-        logger.debug("Received request to create the {}", pokemon);
+        logger.info("Received request to create the {}", pokemon);
         return pokemonService.savePokemon(pokemon);
     }
 
@@ -52,6 +52,7 @@ public class PokemonController {
 
     }
 
+
     // GET http://localhost:8080/api/pokemon/findOnePokemon/1024
     @GetMapping("/findOnePokemon/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -59,20 +60,36 @@ public class PokemonController {
         return pokemonService.findOnePokemon(id);
     }
 
-    //
-    @PutMapping("/updatePokemon/{id}")
+    @GetMapping("/findAllPokemonById/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Pokemon> getMultiplePokemonById(@PathVariable("id") List<Integer> id) {
+        return pokemonService.findAllPokemonById(id);
+    }
+
+    // PUT
+    @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}/updateType2/{type2Id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Pokemon updatePokemon(
-            @PathVariable int id, @RequestBody Pokemon pokemonRequest){
-        pokemonRequest.setPokemonId(id);
-        return pokemonService.updatePokemon(pokemonRequest);
+            @PathVariable int pokemonId,@PathVariable int type1Id,
+            @PathVariable int type2Id,
+            @RequestBody Pokemon pokemonRequest){
+
+        return pokemonService.updatePokemon(pokemonId,type1Id,type2Id,pokemonRequest);
 
     }
 
-    @RequestMapping(value = "/{pokemonId}",method = RequestMethod.DELETE)
-    public String deletePokemon(@PathVariable int pokemonId){
-        pokemonService.deletePokemon(pokemonId);
+    @RequestMapping(value = "/{pokemonId}/type1/{type1Id}",method = RequestMethod.DELETE)
+    public String deletePokemon(@PathVariable int pokemonId, @PathVariable int type1Id){
+        pokemonService.deletePokemon(pokemonId,type1Id);
         return pokemonId + " is deleted";
+    }
+
+//    DELETE http://localhost:8080/api/pokemon/deleteAll
+    @DeleteMapping("/deleteAll")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteAllPokemon(){
+        pokemonService.deleteAllPokemon();
+        return "All Pokemon are deleted";
     }
 
 }
