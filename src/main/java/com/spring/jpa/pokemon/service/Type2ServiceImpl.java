@@ -1,11 +1,14 @@
 package com.spring.jpa.pokemon.service;
 
 import com.spring.jpa.pokemon.exception.NoTypeExistsException;
+import com.spring.jpa.pokemon.exception.TypeAlreadyExistsException;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type2Repository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +33,24 @@ public class Type2ServiceImpl implements Type2Service {
 
     @Override
     @Transactional
-    public void saveType1(List<Type2> type2){
+    public Type2 saveOneType2(@NotNull @Valid final Type2 type2) {
+        if(type2Repository.existsById(type2.getTypeId())){
+            throw  new TypeAlreadyExistsException(
+                    String.format("Type Already exists with id=%d",type2.getTypeId()));
+        }
+
+        return type2Repository.save(type2);
+    }
+
+    @Override
+    @Transactional
+    public void saveType1(@NotNull @Valid final List<Type2> type2){
+        for (Type2 type21:type2){
+            if(type2Repository.existsById(type21.getTypeId())){
+                throw new TypeAlreadyExistsException(
+                        String.format("Type is already available for Type id=%s",type21.getTypeId()));
+            }
+        }
         type2Repository.saveAll(type2);
     }
 
@@ -41,7 +62,7 @@ public class Type2ServiceImpl implements Type2Service {
 
     @Override
     @Transactional
-    public Type2 findOneType(int id){
+    public Type2 findOneType(@NotNull @Valid final int id){
         Optional<Type2> optionalType2 =type2Repository.findById(id);
         return optionalType2.orElse(null);
 
@@ -49,7 +70,7 @@ public class Type2ServiceImpl implements Type2Service {
 
     @Override
     @Transactional
-    public Type2 updateType2(int type2Id, List<Integer> pokemonId, Type2 type2){
+    public Type2 updateType2(@NotNull @Valid final int type2Id, @NotNull @Valid final List<Integer> pokemonId, @NotNull @Valid final Type2 type2){
        logger.debug("Updating {} on type2Id={} pokemonId={}",type2,type2Id,pokemonId);
         Type2 type21 = type2Repository.findById(type2Id)
                 .orElseThrow(() -> new NoTypeExistsException(String.format("No Type exists with id=%d",type2Id)));
@@ -67,7 +88,7 @@ public class Type2ServiceImpl implements Type2Service {
 
     @Override
     @Transactional
-    public void delete(int type2id) {
+    public void delete(@NotNull @Valid final int type2id) {
         logger.debug("Deleting {}",type2id);
         Optional<Type2> optionalType2 = type2Repository.findById(type2id);
         if (optionalType2.isEmpty()){
@@ -75,5 +96,11 @@ public class Type2ServiceImpl implements Type2Service {
                     String.format("No Type exist with id=%s",type2id));
         }
         type2Repository.deleteById(type2id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllTypes() {
+        type2Repository.deleteAll();
     }
 }
