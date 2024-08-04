@@ -2,6 +2,8 @@ package com.spring.jpa.pokemon.service;
 
 import com.spring.jpa.pokemon.exception.NoPokemonExistsException;
 import com.spring.jpa.pokemon.exception.NoTypeExistsException;
+import com.spring.jpa.pokemon.exception.PokemonAlreadyExistsException;
+import com.spring.jpa.pokemon.exception.TypeAlreadyExistsException;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +36,25 @@ public class Type1ServiceImpl implements Type1Service{
 
     @Override
     @Transactional
-    public void saveType1(List<Type1> type1){
-       type1Repository.saveAll(type1);
+    public Type1 saveOneType1(@NotNull @Valid final Type1 type1) {
+        if(type1Repository.existsById(type1.getTypeId())){
+            throw  new TypeAlreadyExistsException(String.format("Type Already exists with id=%d",type1.getTypeId()));
+        }
+
+        return type1Repository.save(type1);
+    }
+
+    @Override
+    @Transactional
+    public void saveType1(@NotNull @Valid final List<Type1> type1){
+       for (Type1 type11:type1){
+           if(type1Repository.existsById(type11.getTypeId())){
+               throw new TypeAlreadyExistsException(
+                       String.format("Type is already available for Type id=%s",type11.getTypeId()));
+           }
+
+       }
+        type1Repository.saveAll(type1);
     }
 
     @Override
@@ -45,7 +65,7 @@ public class Type1ServiceImpl implements Type1Service{
 
     @Override
     @Transactional
-    public Type1 findOneType(@NotNull @Valid int id){
+    public Type1 findOneType(@NotNull @Valid final int id){
         Optional<Type1> optionalType1 =type1Repository.findById(id);
         return optionalType1.orElse(null);
 
@@ -63,6 +83,9 @@ public class Type1ServiceImpl implements Type1Service{
         for (Pokemon pokemon:pokemonIds){
            type11.setPokemon(pokemonIds);
            pokemon.setType1(type11);
+           pokemon.setPokemonName(pokemon.getPokemonName());
+           pokemon.setPokemonId(pokemon.getPokemonId());
+           pokemon.setPokeDexNumber(pokemon.getPokeDexNumber());
            pokemonRepository.save(pokemon);
         }
         return type1Repository.save(type1);
@@ -100,6 +123,10 @@ public class Type1ServiceImpl implements Type1Service{
         type1Repository.deleteById(type1id);
     }
 
+    @Override
+    public void deleteAllTypes() {
+        type1Repository.deleteAll();
+    }
 
 
 }

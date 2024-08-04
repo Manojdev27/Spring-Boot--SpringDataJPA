@@ -28,6 +28,13 @@ public class PokemonController {
 
     private static final Logger logger = LogManager.getLogger(PokemonController.class);
 
+    @PostMapping("/addOnePokemon")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Pokemon saveMultiplePokemon(@RequestBody Pokemon pokemon){
+        logger.info("Received request to create the {}", pokemon);
+        return pokemonService.saveOnePokemon(pokemon);
+    }
+
 //    POST http://localhost:8080/api/pokemon/addMultiplePokemon
     @PostMapping("/addMultiplePokemon")
     @ResponseStatus(HttpStatus.CREATED)
@@ -66,6 +73,15 @@ public class PokemonController {
         return pokemonService.findAllPokemonById(id);
     }
 
+    @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Pokemon updatePokemonForType1(
+            @PathVariable int pokemonId,@PathVariable int type1Id,
+            @RequestBody Pokemon pokemonRequest){
+
+        return pokemonService.updatePokemonOnlyType1(pokemonId,type1Id,pokemonRequest);
+
+    }
     // PUT
     @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}/updateType2/{type2Id}")
     @ResponseStatus(HttpStatus.CREATED)

@@ -2,6 +2,7 @@ package com.spring.jpa.pokemon.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
+@EqualsAndHashCode
 public class Type1 implements Serializable {
 
     @Id
@@ -27,7 +30,6 @@ public class Type1 implements Serializable {
     private String type1;
 
     @OneToMany(mappedBy = "type1")
-
     private List<Pokemon> pokemon = new ArrayList<>();
 
 }

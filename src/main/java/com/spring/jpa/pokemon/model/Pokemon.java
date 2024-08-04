@@ -2,6 +2,7 @@ package com.spring.jpa.pokemon.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,9 +36,12 @@ public class Pokemon implements Serializable {
     @JoinColumn(name = "type2",referencedColumnName = "typeId")
     private Type2 type2;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "pokemonId", referencedColumnName = "pokeDexNumber")
+    private BaseStats baseStats;
 
-@JsonIgnore
-public Type1 getType1() {
+    @JsonIgnore
+    public Type1 getType1() {
         return type1;
     }
     @JsonIgnore
