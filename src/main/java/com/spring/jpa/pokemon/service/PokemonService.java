@@ -13,6 +13,8 @@ public interface PokemonService {
     public List<Pokemon> getAllPokemon();
     public Optional<Pokemon> findOnePokemon(int id);
     public List<Pokemon> findAllPokemonById(List<Integer> id);
+
+    public List<Pokemon> pokemonCountForType1();
     public Pokemon updatePokemonOnlyType1(int pokemonId,int type1Id,Pokemon pokemon);
     public Pokemon updatePokemon(int pokemonId,int type1Id,int type2Id,Pokemon pokemon);
 

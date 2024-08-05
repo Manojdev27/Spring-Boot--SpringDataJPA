@@ -95,6 +95,12 @@ return pokemonRepository.findAll();
     }
 
     @Override
+    @Transactional
+    public List<Pokemon> pokemonCountForType1() {
+        return pokemonRepository.pokemonCountForType1();
+    }
+
+    @Override
     public Pokemon updatePokemonOnlyType1(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id, @NotNull @Valid final Pokemon pokemon) {
         logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
         Type1 type1 = type1Repository.findById(type1Id)

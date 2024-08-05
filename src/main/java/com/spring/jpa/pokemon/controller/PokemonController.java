@@ -73,6 +73,12 @@ public class PokemonController {
         return pokemonService.findAllPokemonById(id);
     }
 
+    @GetMapping("/pokemonCountForType1")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Pokemon> pokemonCountForType1() {
+        return pokemonService.pokemonCountForType1();
+    }
+
     @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Pokemon updatePokemonForType1(
