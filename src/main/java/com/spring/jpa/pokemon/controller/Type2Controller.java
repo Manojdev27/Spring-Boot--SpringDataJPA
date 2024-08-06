@@ -2,7 +2,6 @@ package com.spring.jpa.pokemon.controller;
 
 import com.spring.jpa.pokemon.dto.Type2Response;
 import com.spring.jpa.pokemon.model.Type2;
-import com.spring.jpa.pokemon.service.PokemonServiceImpl;
 import com.spring.jpa.pokemon.service.Type2ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -62,6 +61,12 @@ public class Type2Controller {
         return type2Service.getAllTypes();
     }
 
+    @GetMapping("/findTypeByName/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public Type2 findTypeByName(@PathVariable("name") String name){
+
+        return type2Service.findType2ByName(name);
+    }
     @GetMapping("/findOneType2/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Type2> getSingleType(@PathVariable("id") int id){
@@ -89,5 +94,9 @@ public class Type2Controller {
         return "All type2 are Deleted";
     }
 
-
+    @GetMapping("/countOfAllType2Pokemon")
+    @ResponseStatus(HttpStatus.OK)
+    public Object[] countOfType2() {
+        return type2Service.countOfType2();
+    }
 }

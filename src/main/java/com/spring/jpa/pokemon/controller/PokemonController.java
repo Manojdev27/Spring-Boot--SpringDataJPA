@@ -73,7 +73,14 @@ public class PokemonController {
         return pokemonService.findAllPokemonById(id);
     }
 
-    @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}")
+    @GetMapping("/findPokemonByName/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public Pokemon getMultiplePokemonById(@PathVariable("name") String name) {
+        return pokemonService.findPokemonByName(name);
+    }
+
+
+    @PutMapping("/updatePokemon/{pokemonId}/updateType1/{type1Id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Pokemon updatePokemonForType1(
             @PathVariable int pokemonId,@PathVariable int type1Id,

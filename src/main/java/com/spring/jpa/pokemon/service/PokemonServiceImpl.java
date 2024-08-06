@@ -1,20 +1,14 @@
 package com.spring.jpa.pokemon.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spring.jpa.pokemon.dto.PokemonResponse;
 import com.spring.jpa.pokemon.exception.NoPokemonExistsException;
 import com.spring.jpa.pokemon.exception.NoTypeExistsException;
 import com.spring.jpa.pokemon.exception.PokemonAlreadyExistsException;
-import com.spring.jpa.pokemon.exception.StatsAlreadyExistsException;
-import com.spring.jpa.pokemon.model.BaseStats;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type1Repository;
 import com.spring.jpa.pokemon.repository.Type2Repository;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -26,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,6 +88,13 @@ return pokemonRepository.findAll();
     }
 
     @Override
+    public Pokemon findPokemonByName(String name) {
+        return pokemonRepository.findPokemonByName(name);
+    }
+
+
+    @Override
+    @Transactional
     public Pokemon updatePokemonOnlyType1(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id, @NotNull @Valid final Pokemon pokemon) {
         logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
         Type1 type1 = type1Repository.findById(type1Id)
@@ -113,7 +113,7 @@ return pokemonRepository.findAll();
     @Override
     @Transactional
     public Pokemon updatePokemon(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id, @Null int type2Id, Pokemon pokemon){
-        logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
+        logger.info("Updating {} on type1id={} type2id={} pokemonId={}",pokemon,type1Id,type2Id,pokemonId);
         Type1 type1 = type1Repository.findById(type1Id)
                 .orElseThrow(() -> new NoTypeExistsException(String.format("No Type exists with id=%d",type1Id)));
 
@@ -149,16 +149,6 @@ pokemonRepository.deleteById(pokemonId);
         pokemonRepository.deleteAll();
     }
 
-
-    public PokemonResponse pokemonResponse(Pokemon pokemon){
-return PokemonResponse.builder()
-        .pokemonId(pokemon.getPokemonId())
-        .pokeDexNumber(pokemon.getPokeDexNumber())
-        .pokemonName(pokemon.getPokemonName())
-        .type1(pokemon.getType1())
-        .type2(pokemon.getType2())
-        .build();
-}
 
 
 }
