@@ -1,9 +1,7 @@
 package com.spring.jpa.pokemon.controller;
 
 import com.spring.jpa.pokemon.dto.Type2Response;
-import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
-import com.spring.jpa.pokemon.service.PokemonServiceImpl;
 import com.spring.jpa.pokemon.service.Type2ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

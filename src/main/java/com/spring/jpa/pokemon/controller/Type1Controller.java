@@ -3,7 +3,6 @@ package com.spring.jpa.pokemon.controller;
 
 import com.spring.jpa.pokemon.dto.Type1Response;
 import com.spring.jpa.pokemon.model.Type1;
-import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type1Repository;
 import com.spring.jpa.pokemon.service.Type1ServiceImpl;

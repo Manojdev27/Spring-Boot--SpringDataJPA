@@ -3,7 +3,6 @@ package com.spring.jpa.pokemon.service;
 import com.spring.jpa.pokemon.exception.NoTypeExistsException;
 import com.spring.jpa.pokemon.exception.TypeAlreadyExistsException;
 import com.spring.jpa.pokemon.model.Pokemon;
-import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type2Repository;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,13 +31,13 @@ public class Type2ServiceImpl implements Type2Service {
 
     @Override
     @Transactional
-    public Type2 saveOneType2(@NotNull @Valid final Type2 type2) {
+    public void saveOneType2(@NotNull @Valid final Type2 type2) {
         if(type2Repository.existsById(type2.getTypeId())){
             throw  new TypeAlreadyExistsException(
                     String.format("Type Already exists with id=%d",type2.getTypeId()));
         }
 
-        return type2Repository.save(type2);
+        type2Repository.save(type2);
     }
 
     @Override

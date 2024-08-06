@@ -3,7 +3,6 @@ package com.spring.jpa.pokemon.controller;
 import com.spring.jpa.pokemon.dto.PokemonResponse;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.service.PokemonServiceImpl;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
