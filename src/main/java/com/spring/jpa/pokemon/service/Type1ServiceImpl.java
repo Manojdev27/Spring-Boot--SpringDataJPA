@@ -1,25 +1,22 @@
 package com.spring.jpa.pokemon.service;
 
-import com.spring.jpa.pokemon.exception.NoPokemonExistsException;
 import com.spring.jpa.pokemon.exception.NoTypeExistsException;
-import com.spring.jpa.pokemon.exception.PokemonAlreadyExistsException;
 import com.spring.jpa.pokemon.exception.TypeAlreadyExistsException;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
 import com.spring.jpa.pokemon.repository.Type1Repository;
+import jakarta.persistence.TypedQuery;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,12 +33,12 @@ public class Type1ServiceImpl implements Type1Service{
 
     @Override
     @Transactional
-    public Type1 saveOneType1(@NotNull @Valid final Type1 type1) {
+    public void saveOneType1(@NotNull @Valid final Type1 type1) {
         if(type1Repository.existsById(type1.getTypeId())){
             throw  new TypeAlreadyExistsException(String.format("Type Already exists with id=%d",type1.getTypeId()));
         }
 
-        return type1Repository.save(type1);
+        type1Repository.save(type1);
     }
 
     @Override
@@ -69,6 +66,11 @@ public class Type1ServiceImpl implements Type1Service{
         Optional<Type1> optionalType1 =type1Repository.findById(id);
         return optionalType1.orElse(null);
 
+    }
+
+    @Override
+    public Type1 findOneTypeByName(String name) {
+        return type1Repository.findType1ByName(name);
     }
 
     @Override
@@ -128,6 +130,10 @@ public class Type1ServiceImpl implements Type1Service{
         type1Repository.deleteAll();
     }
 
+    @Override
+    public Object[] countOfType1() {
+        return type1Repository.countOfType1();
+    }
 
 
 }

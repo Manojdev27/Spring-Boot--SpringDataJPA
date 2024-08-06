@@ -3,6 +3,7 @@ package com.spring.jpa.pokemon.controller;
 import com.spring.jpa.pokemon.dto.PokemonResponse;
 import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.service.PokemonServiceImpl;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,13 +74,14 @@ public class PokemonController {
         return pokemonService.findAllPokemonById(id);
     }
 
-    @GetMapping("/pokemonCountForType1")
+    @GetMapping("/findPokemonByName/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Pokemon> pokemonCountForType1() {
-        return pokemonService.pokemonCountForType1();
+    public Pokemon getMultiplePokemonById(@PathVariable("name") String name) {
+        return pokemonService.findPokemonByName(name);
     }
 
-    @PutMapping("/updatePokemon/{pokemonId}/updateType/{type1Id}")
+
+    @PutMapping("/updatePokemon/{pokemonId}/updateType1/{type1Id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Pokemon updatePokemonForType1(
             @PathVariable int pokemonId,@PathVariable int type1Id,

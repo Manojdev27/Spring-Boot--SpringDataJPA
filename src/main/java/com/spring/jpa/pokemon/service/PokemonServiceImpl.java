@@ -95,12 +95,13 @@ return pokemonRepository.findAll();
     }
 
     @Override
-    @Transactional
-    public List<Pokemon> pokemonCountForType1() {
-        return pokemonRepository.pokemonCountForType1();
+    public Pokemon findPokemonByName(String name) {
+        return pokemonRepository.findPokemonByName(name);
     }
 
+
     @Override
+    @Transactional
     public Pokemon updatePokemonOnlyType1(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id, @NotNull @Valid final Pokemon pokemon) {
         logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
         Type1 type1 = type1Repository.findById(type1Id)
@@ -119,7 +120,7 @@ return pokemonRepository.findAll();
     @Override
     @Transactional
     public Pokemon updatePokemon(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id, @Null int type2Id, Pokemon pokemon){
-        logger.info("Updating {} on type1id={} pokemonId={}",pokemon,type1Id,pokemonId);
+        logger.info("Updating {} on type1id={} type2id={} pokemonId={}",pokemon,type1Id,type2Id,pokemonId);
         Type1 type1 = type1Repository.findById(type1Id)
                 .orElseThrow(() -> new NoTypeExistsException(String.format("No Type exists with id=%d",type1Id)));
 

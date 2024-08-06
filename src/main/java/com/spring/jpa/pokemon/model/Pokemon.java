@@ -48,6 +48,17 @@ public class Pokemon implements Serializable {
     public Type2 getType2() {
         return type2;
     }
+    @JsonIgnore
+    public BaseStats getBaseStats(){
+        return baseStats;
+    }
 
-
+//    @Override
+//    public String toString() {
+//        return "Pokemon{" +
+//                "pokemonId=" + pokemonId +
+//                ", pokeDexNumber=" + pokeDexNumber +
+//                ", pokemonName='" + pokemonName +
+//                '}';
+//    }
 }

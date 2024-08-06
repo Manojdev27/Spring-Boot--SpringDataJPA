@@ -2,8 +2,6 @@ package com.spring.jpa.pokemon.controller;
 
 
 import com.spring.jpa.pokemon.dto.Type1Response;
-import com.spring.jpa.pokemon.dto.Type2Response;
-import com.spring.jpa.pokemon.model.Pokemon;
 import com.spring.jpa.pokemon.model.Type1;
 import com.spring.jpa.pokemon.model.Type2;
 import com.spring.jpa.pokemon.repository.PokemonRepository;
@@ -71,12 +69,20 @@ private final PokemonRepository pokemonRepository;
     public List<Type1> getAllType1WithPokemon() {
     return type1Service.getAllTypes();
     }
+
     @GetMapping("/findOneType/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Type1> getSingleType(@PathVariable("id") int id){
         Optional<Type1> optionalType1 = Optional.ofNullable(type1Service.findOneType(id));
         return optionalType1.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+    }
+
+    @GetMapping("/findTypeByName/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public Type1 findTypeByName(@PathVariable("name") String name){
+
+        return type1Service.findOneTypeByName(name);
     }
 
     @PutMapping("/updateType/{pokemonId}/{type1Id}")
@@ -102,5 +108,13 @@ private final PokemonRepository pokemonRepository;
     @ResponseStatus(HttpStatus.OK)
     public String deleteAllType(){
         return "All type1 are Deleted";
+    }
+
+    @GetMapping("/countOfAllType1Pokemon")
+    @ResponseStatus(HttpStatus.OK)
+    public Object[] countOfType1(){
+        return type1Service.countOfType1();
+
+
     }
 }

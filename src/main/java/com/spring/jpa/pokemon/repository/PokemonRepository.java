@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PokemonRepository extends JpaRepository<Pokemon,Integer> {
 
-
+@Query(value = "select * from pokemon where pokemon_name =:name",nativeQuery = true)
+public Pokemon findPokemonByName(String name);
 
 }

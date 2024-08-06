@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +70,12 @@ public class Type2ServiceImpl implements Type2Service {
     }
 
     @Override
+    public Type2 findType2ByName(String name) {
+        return type2Repository.findType2ByName(name);
+    }
+
+
+    @Override
     @Transactional
     public Type2 updateType2(@NotNull @Valid final int type2Id, @NotNull @Valid final List<Integer> pokemonId, @NotNull @Valid final Type2 type2){
        logger.debug("Updating {} on type2Id={} pokemonId={}",type2,type2Id,pokemonId);
@@ -102,5 +109,10 @@ public class Type2ServiceImpl implements Type2Service {
     @Transactional
     public void deleteAllTypes() {
         type2Repository.deleteAll();
+    }
+
+    @Override
+    public Object[] countOfType2() {
+        return type2Repository.countOfType2();
     }
 }
