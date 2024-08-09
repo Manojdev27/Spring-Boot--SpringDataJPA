@@ -3,6 +3,8 @@ package com.spring.jpa.pokemon.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class BaseStats {
+public class BaseStats implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
