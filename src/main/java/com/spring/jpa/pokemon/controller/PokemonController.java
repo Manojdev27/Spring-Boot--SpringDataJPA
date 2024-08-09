@@ -75,7 +75,7 @@ public class PokemonController {
 
     @GetMapping("/findPokemonByName/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public Pokemon getMultiplePokemonById(@PathVariable("name") String name) {
+    public Pokemon getMultiplePokemonByName(@PathVariable("name") String name) {
         return pokemonService.findPokemonByName(name);
     }
 

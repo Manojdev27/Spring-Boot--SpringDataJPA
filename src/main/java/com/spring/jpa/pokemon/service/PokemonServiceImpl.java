@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +42,7 @@ public class PokemonServiceImpl implements PokemonService {
     private final Type2Repository type2Repository;
 
     @Override
+    @CachePut(value = "pokemon", key = "#pokemon.id")
     public Pokemon saveOnePokemon(Pokemon pokemon) {
        if(pokemonRepository.existsById(pokemon.getPokemonId())){
           throw new PokemonAlreadyExistsException
@@ -50,6 +54,7 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     @Transactional
+    @CachePut(value = "pokemon", key = "#pokemon.id")
     public List<Pokemon> savePokemon(List<Pokemon> pokemon){
         for(Pokemon pokemon1:pokemon){
             if(pokemonRepository.existsById(pokemon1.getPokemonId())) {
@@ -70,6 +75,7 @@ return pokemonRepository.findAll();
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "pokemon" ,key="#id")
     public Optional<Pokemon> findOnePokemon(int id){
         logger.debug("Retrieving a user by user id= {}", id);
 
@@ -83,11 +89,13 @@ return pokemonRepository.findAll();
 
     @Override
     @Transactional
+    @Cacheable(value = "pokemon" ,key="#id")
     public List<Pokemon> findAllPokemonById(List<Integer> id) {
         return pokemonRepository.findAllById(id);
     }
 
     @Override
+    @Cacheable(value = "pokemon" ,key="#name")
     public Pokemon findPokemonByName(String name) {
         return pokemonRepository.findPokemonByName(name);
     }
@@ -132,6 +140,7 @@ return pokemonRepository.findAll();
 
     @Override
     @Transactional
+    @CacheEvict(value = "pokemon",key = "#pokemon.pokemonId")
     public void deletePokemon(@NotNull @Valid final int pokemonId, @NotNull @Valid final int type1Id) {
         logger.info("Deleting {} on PokemonId={}",type1Id,pokemonId);
         if(!type1Repository.existsById(type1Id)){
